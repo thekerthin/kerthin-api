@@ -1,0 +1,54 @@
+{
+  "name": "kerthin-api",
+  "version": "0.0.1",
+  "main": "index.js",
+  "repository": "https://github.com/thekerthin/kerthin-api.git",
+  "author": "sebastiandelaroche <sebastian.delaroche.dev@gmail.com>",
+  "license": "MIT",
+  "peerDependencies": {
+    "@mikro-orm/core": "^4.5.5"
+  },
+  "mikro-orm": {
+    "configPaths": [
+      ".mikro-orm.config.ts",
+      "./dist/mikro-orm.config.js"
+    ]
+  },
+  "scripts": {
+    "build": "rimraf dist && tsc",
+    "start": "nodemon",
+    "start-prod": "node ./dist/src/main",
+    "migration:create": "mikro-orm migration:create",
+    "migration:run": "mikro-orm migration:up"
+  },
+  "dependencies": {
+    "@kerthin/utils": "^0.0.2-0",
+    "@mikro-orm/core": "^4.5.5",
+    "@mikro-orm/migrations": "^4.5.5",
+    "@mikro-orm/nestjs": "^4.2.0",
+    "@mikro-orm/postgresql": "^4.5.5",
+    "@mikro-orm/reflection": "^4.5.5",
+    "@nestjs/common": "^7.6.17",
+    "@nestjs/core": "^7.6.17",
+    "@nestjs/platform-express": "^7.6.17",
+    "class-transformer": "^0.4.0",
+    "class-validator": "^0.13.1",
+    "dotenv-safe": "^8.2.0",
+    "ramda": "^0.27.1",
+    "reflect-metadata": "^0.1.13",
+    "rxjs": "^7.1.0",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "@mikro-orm/cli": "^4.5.5",
+    "@types/node": "^15.6.1",
+    "@typescript-eslint/eslint-plugin": "^4.25.0",
+    "@typescript-eslint/parser": "^4.25.0",
+    "eslint": "^7.27.0",
+    "eslint-config-prettier": "^8.3.0",
+    "nodemon": "^2.0.7",
+    "ts-node": "^10.0.0",
+    "tsconfig-paths": "^3.9.0",
+    "typescript": "^4.3.2"
+  }
+}
