@@ -1,12 +1,21 @@
 version: '3.1'
+
 services:
-  postgresql:
-    image: postgres:alpine
+  # postgresql:
+  #   image: postgres:alpine
+  #   ports:
+  #     - 5432:5432
+  #   environment:
+  #     POSTGRES_USER: root
+  #     POSTGRES_PASSWORD: password
+  #     POSTGRES_DB: kerthin_api
+  #   # volumes:
+  #   #   - ./.database:/docker-entrypoint-initdb.d
+
+  mongodb:
+    image: mongo
     ports:
-      - 5432:5432
+      - 27017:27017
     environment:
-      POSTGRES_USER: root
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: kerthin_api
-    # volumes:
-    #   - ./.database:/docker-entrypoint-initdb.d
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password

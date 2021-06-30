@@ -1,4 +1,4 @@
-import { Module, OnModuleInit } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { MikroORM } from '@mikro-orm/core';
 import { getPrototypes } from '@kerthin/utils';
 
@@ -9,11 +9,6 @@ const modules = getPrototypes(`${__dirname}/modules/**/*Module{.ts,.js}`);
 @Module({
   imports: [DBModule, ...modules],
 })
-export class AppModule implements OnModuleInit {
+export class AppModule {
   constructor(protected readonly orm: MikroORM) {}
-
-  async onModuleInit() {
-    const migrator = this.orm.getMigrator();
-    await migrator.up();
-  }
 }

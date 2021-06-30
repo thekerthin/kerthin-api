@@ -1,13 +1,14 @@
+export const METADATA_KEY = '__internal_props__';
+
 export function ValueObjectProp() {
   return function (target: any, propertyKey: string) {
     const prototype = target.constructor;
-    const properties =
-      Reflect.getOwnMetadata('__constructor_props__', prototype) || [];
+    const properties = Reflect.getOwnMetadata(METADATA_KEY, prototype) || {};
 
-    if (!properties.includes(propertyKey)) {
-      properties.push(propertyKey);
+    if (!properties.hasOwnProperty(propertyKey)) {
+      properties[propertyKey] = Reflect.getMetadata('design:type', target, propertyKey);
     }
 
-    Reflect.defineMetadata('__constructor_props__', properties, prototype);
+    Reflect.defineMetadata(METADATA_KEY, properties, prototype);
   };
 }
