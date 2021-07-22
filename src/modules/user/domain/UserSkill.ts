@@ -13,6 +13,7 @@ import { UserSkillScore } from './value_objects/UserSkillScore';
 export abstract class Props {
   @ValueObjectProp()
   name: UserSkillName;
+
   @ValueObjectProp()
   score: UserSkillScore;
 }

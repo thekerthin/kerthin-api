@@ -1,15 +1,10 @@
-import {
-  Collection,
-  Entity,
-  OneToMany,
-  PrimaryKey,
-  Property,
-  SerializedPrimaryKey,
-} from '@mikro-orm/core';
+import { Collection, Entity, OneToMany, PrimaryKey, Property } from '@mikro-orm/core';
 import { ObjectId } from '@mikro-orm/mongodb';
+import { Transform } from 'class-transformer';
 
 import { UniqueEntityID } from '../../../shared/domain/UniqueEntityID';
 import { AggregateRoot } from '../../../shared/domain/AggregateRoot';
+import { transformValueObject } from '../../../shared/domain/transformValueObject';
 
 import { UserCreatedEvent } from './events/UserCreatedEvent';
 
@@ -27,20 +22,37 @@ import { UserEducation } from './UserEducation';
 import { UserWorkExperience } from './UserWorkExperience';
 import { UserSkill } from './UserSkill';
 
-export abstract class Props {
-  userId: UserId;
+export class Props {
+  userId?: UserId;
+
+  @Transform(transformValueObject(UserName))
   name: UserName;
+
+  @Transform(transformValueObject(UserLastName))
   lastName: UserLastName;
-  bornDate: UserBornDate;
-  title: UserTitle;
-  description: UserDescription;
+
+  @Transform(transformValueObject(UserBornDate))
+  bornDate?: UserBornDate;
+
+  @Transform(transformValueObject(UserTitle))
+  title?: UserTitle;
+
+  @Transform(transformValueObject(UserDescription))
+  description?: UserDescription;
+
+  @Transform(transformValueObject(UserUserName))
   username: UserUserName;
+
+  @Transform(transformValueObject(UserEmail))
   email: UserEmail;
+
+  @Transform(transformValueObject(UserPhone))
   phone: UserPhone;
-  socialNetworks: UserSocialNetwork[] | Collection<UserSocialNetwork>;
-  education: UserEducation[] | Collection<UserEducation>;
-  workExperience: UserWorkExperience[];
-  skills: UserSkill[];
+
+  socialNetworks?: UserSocialNetwork[] | Collection<UserSocialNetwork>;
+  education?: UserEducation[] | Collection<UserEducation>;
+  workExperience?: UserWorkExperience[];
+  skills?: UserSkill[];
 }
 
 @Entity()
@@ -48,7 +60,7 @@ export class User extends AggregateRoot<Props> implements Props {
   @PrimaryKey()
   public readonly _id: ObjectId;
 
-  @SerializedPrimaryKey()
+  // @SerializedPrimaryKey()
   public readonly id: UniqueEntityID;
 
   get userId(): UserId {

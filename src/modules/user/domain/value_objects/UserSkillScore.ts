@@ -1,13 +1,8 @@
-import { ValueObjectProp } from '../../../../shared/domain/decorators/ValueObjectProp';
-import { ValueObject as VO } from '../../../../shared/domain/decorators/ValueObject';
+import { ValueObjectDefaultProps } from '../../../../shared/domain/ValueObjectDefaultProps';
 import { ValueObject } from '../../../../shared/domain/ValueObject';
 
-export abstract class Props {
-  @ValueObjectProp()
-  value: number;
-}
+type Props = ValueObjectDefaultProps<number>;
 
-@VO(Props)
 export class UserSkillScore extends ValueObject<Props> {
   private constructor(props: Props) {
     super(props);
@@ -16,6 +11,8 @@ export class UserSkillScore extends ValueObject<Props> {
   toValue(): number {
     return this.props.value;
   }
+
+  validate(): void {}
 
   public static create(props: Props): UserSkillScore {
     return new UserSkillScore(props);

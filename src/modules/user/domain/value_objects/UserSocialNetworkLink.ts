@@ -1,13 +1,8 @@
-import { ValueObjectProp } from '../../../../shared/domain/decorators/ValueObjectProp';
-import { ValueObject as VO } from '../../../../shared/domain/decorators/ValueObject';
+import { ValueObjectDefaultProps } from '../../../../shared/domain/ValueObjectDefaultProps';
 import { ValueObject } from '../../../../shared/domain/ValueObject';
 
-export abstract class Props {
-  @ValueObjectProp()
-  value: string;
-}
+type Props = ValueObjectDefaultProps<string>;
 
-@VO(Props)
 export class UserSocialNetworkLink extends ValueObject<Props> {
   private constructor(props: Props) {
     super(props);
@@ -16,6 +11,8 @@ export class UserSocialNetworkLink extends ValueObject<Props> {
   toValue(): string {
     return this.props.value;
   }
+
+  validate(): void {}
 
   public static create(props: Props): UserSocialNetworkLink {
     return new UserSocialNetworkLink(props);

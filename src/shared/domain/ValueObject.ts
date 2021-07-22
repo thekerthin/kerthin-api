@@ -16,6 +16,8 @@ export abstract class ValueObject<T extends ValueObjectProps> {
     | Object
     | Array<string | number | boolean | Object>;
 
+  abstract validate(): void;
+
   public equals(vo?: ValueObject<T>): boolean {
     if (vo === null || vo === undefined) {
       return false;

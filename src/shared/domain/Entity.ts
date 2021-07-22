@@ -35,10 +35,18 @@ export abstract class Entity<T> {
   }
 
   public toRaw<T = any>(): T {
-    return {
-      id: this.id.toString(),
-      ...this.props,
-    } as unknown as T;
+    const defaults = { id: this.id.toString() };
+
+    return Object.entries(this.props).reduce((raw: any, [propName, valueObject]: any) => {
+      raw[propName] = valueObject.toValue();
+      return raw;
+    }, defaults);
+  }
+
+  public validate(): void {
+    Object.keys(this.props).forEach((propKey) => {
+      this.props[propKey].validate();
+    });
   }
 
   private static setProps<T>(entity: Entity<T>, props: T) {

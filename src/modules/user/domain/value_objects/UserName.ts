@@ -1,13 +1,10 @@
-import { ValueObjectProp } from '../../../../shared/domain/decorators/ValueObjectProp';
-import { ValueObject as VO } from '../../../../shared/domain/decorators/ValueObject';
+import { isEmptyOrNil } from '@kerthin/utils';
+
+import { ValueObjectDefaultProps } from '../../../../shared/domain/ValueObjectDefaultProps';
 import { ValueObject } from '../../../../shared/domain/ValueObject';
 
-export abstract class Props {
-  @ValueObjectProp()
-  value: string;
-}
+type Props = ValueObjectDefaultProps<string>;
 
-@VO(Props)
 export class UserName extends ValueObject<Props> {
   private constructor(props: Props) {
     super(props);
@@ -15,6 +12,12 @@ export class UserName extends ValueObject<Props> {
 
   toValue(): string {
     return this.props.value;
+  }
+
+  validate(): void {
+    if (isEmptyOrNil(this.props.value)) {
+      throw new Error('The user name field cannot be empty.');
+    }
   }
 
   public static create(props: Props): UserName {
