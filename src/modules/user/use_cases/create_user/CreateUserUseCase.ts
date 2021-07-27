@@ -17,8 +17,8 @@ export class CreateUserUseCase implements UseCase<CreateUserDTO, Promise<UserDTO
 
     user.validate();
 
-    await this.userRepository.save(user);
+    await this.userRepository.insert(user);
 
-    return Promise.resolve(data as UserDTO);
+    return user.toRaw();
   }
 }

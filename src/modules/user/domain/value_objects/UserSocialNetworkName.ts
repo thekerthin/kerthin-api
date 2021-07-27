@@ -1,3 +1,5 @@
+import { isEmptyOrNil } from '@kerthin/utils';
+
 import { ValueObjectDefaultProps } from '../../../../shared/domain/ValueObjectDefaultProps';
 import { ValueObject } from '../../../../shared/domain/ValueObject';
 
@@ -12,7 +14,11 @@ export class UserSocialNetworkName extends ValueObject<Props> {
     return this.props.value;
   }
 
-  validate(): void {}
+  validate(): void {
+    if (isEmptyOrNil(this.props.value)) {
+      throw new Error('The social network name field cannot be empty.');
+    }
+  }
 
   public static create(props: Props): UserSocialNetworkName {
     return new UserSocialNetworkName(props);

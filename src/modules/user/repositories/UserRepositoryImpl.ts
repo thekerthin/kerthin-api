@@ -4,7 +4,7 @@ import { UserRepository } from './UserRepository';
 
 @Injectable()
 export class UserRepositoryImpl extends UserRepository {
-  async save(domain: User): Promise<void> {
+  async insert(domain: User): Promise<void> {
     await this.repo.nativeInsert(domain.toRaw());
   }
 }

@@ -1,26 +1,27 @@
 import { Property, Entity, ManyToOne, PrimaryKey, SerializedPrimaryKey } from '@mikro-orm/core';
 import { ObjectId } from '@mikro-orm/mongodb';
+import { Transform } from 'class-transformer';
 
 import { Entity as DomainEntity } from '../../../shared/domain/Entity';
 import { UniqueEntityID } from '../../../shared/domain/UniqueEntityID';
-import { ValueObjectProp } from '../../../shared/domain/decorators/ValueObjectProp';
-import { ValueObject as VO } from '../../../shared/domain/decorators/ValueObject';
 
 import { User } from './User';
 import { UserSocialNetworkName } from './value_objects/UserSocialNetworkName';
 import { UserSocialNetworkLink } from './value_objects/UserSocialNetworkLink';
 import { UserSocialNetworkDescription } from './value_objects/UserSocialNetworkDescription';
+import { transformValueObject } from '../../../shared/domain/transformValueObject';
 
-export abstract class Props {
-  @ValueObjectProp()
+export class Props {
+  @Transform(transformValueObject(UserSocialNetworkName))
   name: UserSocialNetworkName;
-  @ValueObjectProp()
+
+  @Transform(transformValueObject(UserSocialNetworkLink))
   link: UserSocialNetworkLink;
-  @ValueObjectProp()
+
+  @Transform(transformValueObject(UserSocialNetworkDescription))
   description: UserSocialNetworkDescription;
 }
 
-@VO(Props)
 @Entity()
 export class UserSocialNetwork extends DomainEntity<Props> implements Props {
   private constructor(props: Props, id?: UniqueEntityID) {
@@ -30,7 +31,7 @@ export class UserSocialNetwork extends DomainEntity<Props> implements Props {
   @PrimaryKey()
   public readonly _id: ObjectId;
 
-  @SerializedPrimaryKey()
+  // @SerializedPrimaryKey()
   public readonly id: UniqueEntityID;
 
   @Property({ type: 'string' })

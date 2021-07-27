@@ -1,6 +1,6 @@
-import { Collection, Entity, OneToMany, PrimaryKey, Property } from '@mikro-orm/core';
+import { Entity, OneToMany, PrimaryKey, Property } from '@mikro-orm/core';
 import { ObjectId } from '@mikro-orm/mongodb';
-import { Transform } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 
 import { UniqueEntityID } from '../../../shared/domain/UniqueEntityID';
 import { AggregateRoot } from '../../../shared/domain/AggregateRoot';
@@ -17,10 +17,10 @@ import { UserDescription } from './value_objects/UserDescription';
 import { UserUserName } from './value_objects/UserUserName';
 import { UserEmail } from './value_objects/UserEmail';
 import { UserPhone } from './value_objects/UserPhone';
-import { UserSocialNetwork } from './UserSocialNetwork';
-import { UserEducation } from './UserEducation';
-import { UserWorkExperience } from './UserWorkExperience';
-import { UserSkill } from './UserSkill';
+import { UserSocialNetwork, Props as UserSocialNetworkProps } from './UserSocialNetwork';
+import { UserEducation, Props as UserEducationProps } from './UserEducation';
+import { UserWorkExperience, Props as UserWorkExperienceProps } from './UserWorkExperience';
+import { UserSkill, UserSkill as UserSkillProps } from './UserSkill';
 
 export class Props {
   userId?: UserId;
@@ -49,13 +49,20 @@ export class Props {
   @Transform(transformValueObject(UserPhone))
   phone: UserPhone;
 
-  socialNetworks?: UserSocialNetwork[] | Collection<UserSocialNetwork>;
-  education?: UserEducation[] | Collection<UserEducation>;
+  @Type(() => UserSocialNetworkProps)
+  socialNetworks?: UserSocialNetwork[];
+
+  @Type(() => UserEducationProps)
+  education?: UserEducation[];
+
+  @Type(() => UserWorkExperienceProps)
   workExperience?: UserWorkExperience[];
+
+  @Type(() => UserSkillProps)
   skills?: UserSkill[];
 }
 
-@Entity()
+@Entity({ tableName: 'users' })
 export class User extends AggregateRoot<Props> implements Props {
   @PrimaryKey()
   public readonly _id: ObjectId;
@@ -92,10 +99,10 @@ export class User extends AggregateRoot<Props> implements Props {
   phone: UserPhone;
 
   @OneToMany(() => UserSocialNetwork, (sn) => sn.user)
-  socialNetworks = new Collection<UserSocialNetwork>(this);
+  socialNetworks: UserSocialNetwork[];
 
   @OneToMany(() => UserEducation, (education) => education.user)
-  education = new Collection<UserEducation>(this);
+  education: UserEducation[];
 
   @OneToMany(() => UserWorkExperience, (we) => we.user)
   workExperience: UserWorkExperience[];
@@ -109,6 +116,23 @@ export class User extends AggregateRoot<Props> implements Props {
 
   public static create(props: Props, id?: UniqueEntityID): User {
     const isNew = !!id === false;
+
+    // TODO: this could be improved
+    if (Array.isArray(props.socialNetworks) && props.socialNetworks.length > 0) {
+      props.socialNetworks = props.socialNetworks.map((sn) => UserSocialNetwork.create(sn));
+    }
+    // TODO: this could be improved
+    if (Array.isArray(props.education) && props.education.length > 0) {
+      props.education = props.education.map((e) => UserEducation.create(e));
+    }
+    // TODO: this could be improved
+    if (Array.isArray(props.workExperience) && props.workExperience.length > 0) {
+      props.workExperience = props.workExperience.map((we) => UserWorkExperience.create(we));
+    }
+    // TODO: this could be improved
+    if (Array.isArray(props.skills) && props.skills.length > 0) {
+      props.skills = props.skills.map((s) => UserSkill.create(s));
+    }
 
     const user = new User({ ...props }, id);
 

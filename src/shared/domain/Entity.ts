@@ -37,16 +37,25 @@ export abstract class Entity<T> {
   public toRaw<T = any>(): T {
     const defaults = { id: this.id.toString() };
 
-    return Object.entries(this.props).reduce((raw: any, [propName, valueObject]: any) => {
-      raw[propName] = valueObject.toValue();
-      return raw;
-    }, defaults);
+    return this.serialize(this.props, defaults);
   }
 
+  // TODO: change validate sign/API, return all the errors presented
   public validate(): void {
     Object.keys(this.props).forEach((propKey) => {
-      this.props[propKey].validate();
+      const prop = this.props[propKey];
+      Array.isArray(prop) ? prop.forEach((p) => p.validate()) : prop.validate();
     });
+  }
+
+  private serialize(props: any, defaults: any = {}) {
+    return Object.entries(props).reduce((raw: any, [propName, valueObject]: any) => {
+      raw[propName] = Array.isArray(valueObject)
+        ? valueObject.map((vo) => this.serialize(vo.props))
+        : valueObject.toValue();
+
+      return raw;
+    }, defaults);
   }
 
   private static setProps<T>(entity: Entity<T>, props: T) {

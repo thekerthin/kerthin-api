@@ -17,6 +17,13 @@ type User {
   username: String
   email: String
   phone: String
+  socialNetworks: [UserSocialNetwork]
+}
+
+type UserSocialNetwork {
+  name: String!
+  link: String!
+  description: String
 }
 
 input CreateUserInput {
@@ -28,4 +35,11 @@ input CreateUserInput {
   username: String!
   email: String!
   phone: String
+  socialNetworks: [UserSocialNetworkInput]
+}
+
+input UserSocialNetworkInput {
+  name: String!
+  link: String!
+  description: String
 }

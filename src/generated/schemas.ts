@@ -16,6 +16,13 @@ export class CreateUserInput {
     username: string;
     email: string;
     phone?: Nullable<string>;
+    socialNetworks?: Nullable<Nullable<UserSocialNetworkInput>[]>;
+}
+
+export class UserSocialNetworkInput {
+    name: string;
+    link: string;
+    description?: Nullable<string>;
 }
 
 export abstract class IQuery {
@@ -38,6 +45,13 @@ export class User {
     username?: Nullable<string>;
     email?: Nullable<string>;
     phone?: Nullable<string>;
+    socialNetworks?: Nullable<Nullable<UserSocialNetwork>[]>;
+}
+
+export class UserSocialNetwork {
+    name: string;
+    link: string;
+    description?: Nullable<string>;
 }
 
 type Nullable<T> = T | null;
