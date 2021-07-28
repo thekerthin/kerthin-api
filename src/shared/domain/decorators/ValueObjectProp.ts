@@ -1,14 +1,23 @@
-export const METADATA_KEY = '__internal_props__';
+import { Transform, Type } from 'class-transformer';
 
-export function ValueObjectProp() {
+const primitives = [String, Number, Boolean, Date];
+
+type Options = {
+  type?: any;
+};
+
+export function ValueObjectProp(options: Options = {}) {
   return function (target: any, propertyKey: string) {
-    const prototype = target.constructor;
-    const properties = Reflect.getOwnMetadata(METADATA_KEY, prototype) || {};
+    const typing = Reflect.getMetadata('design:type', target, propertyKey);
+    const isPrimitive = primitives.includes(typing);
 
-    if (!properties.hasOwnProperty(propertyKey)) {
-      properties[propertyKey] = Reflect.getMetadata('design:type', target, propertyKey);
+    if (isPrimitive) return;
+
+    if (options.type) {
+      Type(() => options.type)(target, propertyKey);
+      return;
     }
 
-    Reflect.defineMetadata(METADATA_KEY, properties, prototype);
+    Transform(({ value }) => typing.create({ value }))(target, propertyKey);
   };
 }

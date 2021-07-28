@@ -1,10 +1,9 @@
 import { Entity, OneToMany, PrimaryKey, Property } from '@mikro-orm/core';
 import { ObjectId } from '@mikro-orm/mongodb';
-import { Transform, Type } from 'class-transformer';
 
 import { UniqueEntityID } from '../../../shared/domain/UniqueEntityID';
 import { AggregateRoot } from '../../../shared/domain/AggregateRoot';
-import { transformValueObject } from '../../../shared/domain/transformValueObject';
+import { ValueObjectProp } from '../../../shared/domain/decorators/ValueObjectProp';
 
 import { UserCreatedEvent } from './events/UserCreatedEvent';
 
@@ -24,42 +23,18 @@ import { UserSkill, UserSkill as UserSkillProps } from './UserSkill';
 
 export class Props {
   userId?: UserId;
-
-  @Transform(transformValueObject(UserName))
-  name: UserName;
-
-  @Transform(transformValueObject(UserLastName))
-  lastName: UserLastName;
-
-  @Transform(transformValueObject(UserBornDate))
-  bornDate?: UserBornDate;
-
-  @Transform(transformValueObject(UserTitle))
-  title?: UserTitle;
-
-  @Transform(transformValueObject(UserDescription))
-  description?: UserDescription;
-
-  @Transform(transformValueObject(UserUserName))
-  username: UserUserName;
-
-  @Transform(transformValueObject(UserEmail))
-  email: UserEmail;
-
-  @Transform(transformValueObject(UserPhone))
-  phone: UserPhone;
-
-  @Type(() => UserSocialNetworkProps)
-  socialNetworks?: UserSocialNetwork[];
-
-  @Type(() => UserEducationProps)
-  education?: UserEducation[];
-
-  @Type(() => UserWorkExperienceProps)
-  workExperience?: UserWorkExperience[];
-
-  @Type(() => UserSkillProps)
-  skills?: UserSkill[];
+  @ValueObjectProp() name: UserName;
+  @ValueObjectProp() lastName: UserLastName;
+  @ValueObjectProp() bornDate?: UserBornDate;
+  @ValueObjectProp() title?: UserTitle;
+  @ValueObjectProp() description?: UserDescription;
+  @ValueObjectProp() username: UserUserName;
+  @ValueObjectProp() email: UserEmail;
+  @ValueObjectProp() phone: UserPhone;
+  @ValueObjectProp({ type: UserSocialNetworkProps }) socialNetworks?: UserSocialNetwork[];
+  @ValueObjectProp({ type: UserEducationProps }) education?: UserEducation[];
+  @ValueObjectProp({ type: UserWorkExperienceProps }) workExperience?: UserWorkExperience[];
+  @ValueObjectProp({ type: UserSkillProps }) skills?: UserSkill[];
 }
 
 @Entity({ tableName: 'users' })

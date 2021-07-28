@@ -4,6 +4,7 @@ import { Transform } from 'class-transformer';
 
 import { Entity as DomainEntity } from '../../../shared/domain/Entity';
 import { UniqueEntityID } from '../../../shared/domain/UniqueEntityID';
+import { ValueObjectProp } from '../../../shared/domain/decorators/ValueObjectProp';
 
 import { User } from './User';
 import { UserSocialNetworkName } from './value_objects/UserSocialNetworkName';
@@ -11,15 +12,10 @@ import { UserSocialNetworkLink } from './value_objects/UserSocialNetworkLink';
 import { UserSocialNetworkDescription } from './value_objects/UserSocialNetworkDescription';
 import { transformValueObject } from '../../../shared/domain/transformValueObject';
 
-export class Props {
-  @Transform(transformValueObject(UserSocialNetworkName))
-  name: UserSocialNetworkName;
-
-  @Transform(transformValueObject(UserSocialNetworkLink))
-  link: UserSocialNetworkLink;
-
-  @Transform(transformValueObject(UserSocialNetworkDescription))
-  description: UserSocialNetworkDescription;
+export abstract class Props {
+  @ValueObjectProp() name: UserSocialNetworkName;
+  @ValueObjectProp() link: UserSocialNetworkLink;
+  @ValueObjectProp() description: UserSocialNetworkDescription;
 }
 
 @Entity()

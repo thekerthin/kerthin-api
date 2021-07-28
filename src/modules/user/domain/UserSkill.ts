@@ -4,21 +4,16 @@ import { ObjectId } from '@mikro-orm/mongodb';
 import { Entity as DomainEntity } from '../../../shared/domain/Entity';
 import { UniqueEntityID } from '../../../shared/domain/UniqueEntityID';
 import { ValueObjectProp } from '../../../shared/domain/decorators/ValueObjectProp';
-import { ValueObject as VO } from '../../../shared/domain/decorators/ValueObject';
 
 import { User } from './User';
 import { UserSkillName } from './value_objects/UserSkillName';
 import { UserSkillScore } from './value_objects/UserSkillScore';
 
 export abstract class Props {
-  @ValueObjectProp()
-  name: UserSkillName;
-
-  @ValueObjectProp()
-  score: UserSkillScore;
+  @ValueObjectProp() name: UserSkillName;
+  @ValueObjectProp() score: UserSkillScore;
 }
 
-@VO(Props)
 @Entity()
 export class UserSkill extends DomainEntity<Props> implements Props {
   private constructor(props: Props, id?: UniqueEntityID) {
@@ -28,7 +23,7 @@ export class UserSkill extends DomainEntity<Props> implements Props {
   @PrimaryKey()
   public readonly _id: ObjectId;
 
-  @SerializedPrimaryKey()
+  // @SerializedPrimaryKey()
   public readonly id: UniqueEntityID;
 
   @Property({ type: 'string' })
