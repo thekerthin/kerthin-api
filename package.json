@@ -23,7 +23,7 @@
     "migration:run": "mikro-orm migration:up"
   },
   "dependencies": {
-    "@kerthin/utils": "^0.0.2-0",
+    "@kerthin/utils": "0.0.1-alpha.0",
     "@mikro-orm/core": "^4.5.5",
     "@mikro-orm/migrations": "^4.5.5",
     "@mikro-orm/mongodb": "^4.5.6",

@@ -1,14 +1,15 @@
 type Query {
-  findUser(id: ID!): User
-  findUsers: [User]
+  user(id: ID!): User
+  users(pagination: PaginationInput): UserPaginationResult
 }
 
 type Mutation {
   createUser(input: CreateUserInput!): User
+  updateUser(id: ID, input: UpdateUserInput!): User
 }
 
 type User {
-  id: ID!
+  id: ID
   name: String
   lastName: String
   bornDate: String
@@ -18,12 +19,48 @@ type User {
   email: String
   phone: String
   socialNetworks: [UserSocialNetwork]
+  education: [Education]
+  workExperience: [WorkExperience]
+  skills: [Skill]
 }
 
 type UserSocialNetwork {
-  name: String!
-  link: String!
+  name: String
+  link: String
   description: String
+}
+
+type Education {
+  institute: String
+  title: String
+  startDate: String
+  endDate: String
+  isCurrentStudy: Boolean
+  description: String
+}
+
+type WorkExperience {
+  jobTitle: String
+  jobType: String
+  company: String
+  location: String
+  startDate: String
+  endDate: String
+  isCurrentJob: Boolean
+  description: String
+}
+
+type Skill {
+  name: String
+  score: Int
+}
+
+type UserEdge @extends(type: "Edge") {
+  node: User
+}
+
+type UserPaginationResult @extends(type: "PaginationResult") {
+  edges: [UserEdge]
 }
 
 input CreateUserInput {
@@ -36,10 +73,51 @@ input CreateUserInput {
   email: String!
   phone: String
   socialNetworks: [UserSocialNetworkInput]
+  education: [EducationInput]
+  workExperience: [WorkExperienceInput]
+  skills: [SkillInput]
+}
+
+input UpdateUserInput {
+  name: String
+  lastName: String
+  bornDate: String
+  title: String
+  description: String
+  phone: String
+  socialNetworks: [UserSocialNetworkInput]
+  education: [EducationInput]
+  workExperience: [WorkExperienceInput]
+  skills: [SkillInput]
 }
 
 input UserSocialNetworkInput {
   name: String!
   link: String!
   description: String
+}
+
+input EducationInput {
+  institute: String!
+  title: String!
+  startDate: String
+  endDate: String
+  isCurrentStudy: Boolean
+  description: String
+}
+
+input WorkExperienceInput {
+  jobTitle: String!
+  jobType: String!
+  company: String!
+  location: String
+  startDate: String
+  endDate: String
+  isCurrentJob: Boolean
+  description: String
+}
+
+input SkillInput {
+  name: String!
+  score: Int!
 }

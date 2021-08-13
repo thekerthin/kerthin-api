@@ -1,0 +1,1 @@
+directive @extends(type: String!) on OBJECT

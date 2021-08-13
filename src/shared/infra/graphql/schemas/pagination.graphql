@@ -1,0 +1,31 @@
+type Edge {
+  node: Node
+  cursor: Cursor
+}
+
+type PageInfo {
+  startCursor: Cursor
+  hasNextPage: Boolean
+  endCursor: Cursor
+  hasPreviousPage: Boolean
+}
+
+type PaginationResult {
+  totalCount: Int
+  edges: [Edge]
+  pageInfo: PageInfo
+}
+
+input PaginationInput {
+  # basic - common
+  # limit: Int
+  # offset: Int
+
+  # fordward
+  first: Int
+  after: Cursor
+
+  # backward
+  last: Int
+  before: Cursor
+}

@@ -5,9 +5,13 @@ import { getPrototypes } from '@kerthin/utils';
 import { join } from 'path';
 
 import { DBModule } from './shared/infra/database/DBModule';
+import { ExtendsDirective } from './shared/infra/graphql/directives/extends';
 
 const graphql = GraphQLModule.forRoot({
-  typePaths: [join(__dirname, '/modules/**/infra/graphql/*.graphql')],
+  typePaths: [join(process.cwd(), 'src/**/*.graphql')],
+  schemaDirectives: {
+    extends: ExtendsDirective,
+  },
 });
 
 const modules = getPrototypes(`${__dirname}/modules/**/*Module{.ts,.js}`);
